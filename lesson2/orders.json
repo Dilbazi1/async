@@ -1,0 +1,53 @@
+{
+    "orders": [
+        {
+            "item": "item",
+            "quantity": 13,
+            "price": 2300,
+            "buyer": "buyer",
+            "date": "12.09.23"
+        },
+        {
+            "item": "item",
+            "quantity": 13,
+            "price": 2300,
+            "buyer": "buyer",
+            "date": "12.09.23"
+        },
+        {
+            "item": "Сервер",
+            "quantity": 13,
+            "price": 2300,
+            "buyer": "buyer",
+            "date": "12.09.23"
+        },
+        {
+            "item": "Сервер",
+            "quantity": 13,
+            "price": 2300,
+            "buyer": "buyer",
+            "date": "12.09.23"
+        },
+        {
+            "item": "Сервер",
+            "quantity": 13,
+            "price": 2300,
+            "buyer": "buyer",
+            "date": "12.09.23"
+        },
+        {
+            "item": "Сервер",
+            "quantity": 13,
+            "price": 2300,
+            "buyer": "buyer",
+            "date": "12.09.23"
+        },
+        {
+            "item": "Сервер",
+            "quantity": 13,
+            "price": 2300,
+            "buyer": "buyer",
+            "date": "12.09.23"
+        }
+    ]
+}
