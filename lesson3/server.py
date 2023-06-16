@@ -27,10 +27,10 @@ def main():
         if listen_port < 1024 or listen_port > 65535:
             raise ValueError
     except IndexError:
-        print('poske parametra -\'p\' neobxodimo ukazat nomer porta.')
+        print('после параматра -\'p\'  необходимо указать номер порта.')
         sys.exit(1)
     except ValueError:
-        print('v kacetsve porta 1024 n 65535')
+        print(' в качестве порта может быть указано только число в диапазоне  1024 до 65535')
         sys.exit(1)
 
     try:
@@ -40,7 +40,7 @@ def main():
             listen_address = ''
 
     except IndexError:
-        print(' posle parametra')
+        print(' после параметра \'a\'-необходимо указать адрес,который будет слушать сервер.')
         sys.exit(1)
     transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     transport.bind((listen_address, listen_port))
@@ -54,7 +54,7 @@ def main():
             send_message(client, response)
             client.close()
         except (ValueError, json.JSONDecodeError):
-            print("prinyato nekorreltnaya sobsh ot klienta")
+            print(" Принято некорректное сообщение от клиента")
             client.close()
 
 

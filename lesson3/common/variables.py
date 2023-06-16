@@ -4,7 +4,7 @@
 # порт по умолчанию сетевого действия
 DEFAULT_PORT=7777
 # ип адрес по умолчанию для подключения клиента
-DEFAULT_IP_ADDRESS='127.0.O.1'
+DEFAULT_IP_ADDRESS='localhost'
 # максимальная длина сообщения в байтах
 MAX_PACKAGE_LENGTH=1024
 MAX_CONNECTION=5
