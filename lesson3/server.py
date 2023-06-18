@@ -47,6 +47,7 @@ def main():
     transport.listen(MAX_CONNECTION)
     while True:
         client, client_address = transport.accept()
+        print(client)
         try:
             message_from_client = get_message(client)
             print(message_from_client)

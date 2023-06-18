@@ -5,7 +5,9 @@ from variables import MAX_PACKAGE_LENGTH, ENCODING
 
 
 def get_message(sock):
+    print(sock)
     encoded_response = sock.recv(MAX_PACKAGE_LENGTH)
+    print(encoded_response)
     if isinstance(encoded_response, bytes):
         json_response = encoded_response.decode(ENCODING)
         response = json.loads(json_response)
