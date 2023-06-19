@@ -2,7 +2,7 @@ import sys
 import json
 import socket
 import time
-
+import unittest
 
 from common.utils import get_message, send_message
 from common.variables import ACTION, PRESENCE, TIME, USER, ACCOUNT_NAME, RESPONSE, ERROR, DEFAULT_IP_ADDRESS, \
@@ -45,6 +45,7 @@ def main():
     transport.connect((server_address, server_port))
     message_to_server = create_presence()
     send_message(transport, message_to_server)
+    print()
     try:
         answer = process_ans(get_message(transport))
         print(answer)
