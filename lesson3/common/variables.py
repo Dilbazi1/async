@@ -1,5 +1,5 @@
 """ Константы"""
-
+import logging
 
 # порт по умолчанию сетевого действия
 DEFAULT_PORT=7777
@@ -7,9 +7,11 @@ DEFAULT_PORT=7777
 DEFAULT_IP_ADDRESS='localhost'
 # максимальная длина сообщения в байтах
 MAX_PACKAGE_LENGTH=1024
-MAX_CONNECTION=5
+MAX_CONNECTIONS=5
 # кодировка проекта
 ENCODING='utf-8'
+# Текущий уровень логирования
+LOGGING_LEVEL = logging.DEBUG
 
 
 
