@@ -1,0 +1,5 @@
+2023-06-22 20:10:04,303 CRITICAL server_config.py Критическая ошибка
+2023-06-22 20:10:04,304 CRITICAL server_config.py Критическая ошибка
+2023-06-22 20:10:04,304 ERROR server_config.py Ошибка
+2023-06-22 20:10:04,304 DEBUG server_config.py Отладочная информация
+2023-06-22 20:10:04,304 INFO server_config.py Информационное сообщение
