@@ -12,20 +12,12 @@ from errors import ReqFieldMissingError
 from common.utils import get_message, send_message
 from common.variables import ACTION, PRESENCE, TIME, USER, ACCOUNT_NAME, RESPONSE, ERROR, DEFAULT_IP_ADDRESS, \
     DEFAULT_PORT
+from decorator import log
+# from decorator import Log
+
 
 LOGGER=logging.getLogger('client')
-def log(func):
-   def log_call(*args,**kwargs)  :
-     res=func(*args,**kwargs)
-     LOGGER.debug(
-          f'Функция {func.__name__} параметр {args},{kwargs}'
-         f'модуль {func.__module__}'
-         f'вызов из функции {traceback.format_stack()[0].strip().split()[-1]}'
-         f'вызов из функции{inspect.stack()[1][3]}')
 
-
-     return res
-   return log_call
 
 @log
 def create_presence(account_name='Guest'):
@@ -37,6 +29,7 @@ def create_presence(account_name='Guest'):
     }
     LOGGER.debug(f'Сформировано {PRESENCE} сообщение для пользователя {account_name}')
     return out
+
 
 @log
 def process_ans(message):

@@ -6,39 +6,29 @@ import argparse
 import logging
 import traceback
 
-#import decorator
 
 import log.logs_config.server_config
 from errors import IncorrectDataRecivedError
 from common.variables import ACTION, ACCOUNT_NAME, RESPONSE, MAX_CONNECTIONS, PRESENCE, \
     TIME, USER, ERROR, DEFAULT_PORT
 from common.utils import get_message, send_message
+from decorator import Log
+from decorator import log
 
 LOGGER = logging.getLogger('server')
 
 
 
 
-import logging
-import sys
-
-class Log:
-    def __call__(self, func):
-        def log_call(*args,**kwargs):
-            res = func(*args, **kwargs)
-            LOGGER.debug(
-                 f'Функция {func.__name__} параметр {args},{kwargs}'
-                 f'модуль {func.__module__}'
-                 f'вызов из функции {traceback.format_stack()[0].strip().split()[-1]}'
-                 f'вызов из функции{inspect.stack()[1][3]}')
-            return res
-
-        return log_call
 
 
 
 
-@Log()
+
+
+
+# @Log()
+@log
 def process_client_message(message):
     """
        Обработчик сообщений от клиентов, принимает словарь - сообщение от клинта,
@@ -56,8 +46,8 @@ def process_client_message(message):
 
     }
 
-
-@Log()
+# @Log()
+@log
 def create_arg_parser():
     """
     Парсер аргументов коммандной строки

@@ -1,0 +1,6 @@
+2023-06-28 22:39:24,714 INFO server.py Установлено соедение с ПК ('127.0.0.1', 41758)
+2023-06-28 22:39:24,715 DEBUG server.py Получено сообщение {'action': 'presence', 'time': 1687977564.7145743, 'user': {'account_name': 'Guest'}}
+2023-06-28 22:39:24,715 DEBUG server.py Разбор сообщения от клиента : {'action': 'presence', 'time': 1687977564.7145743, 'user': {'account_name': 'Guest'}}
+2023-06-28 22:39:24,715 DEBUG server.py Функция process_client_message параметр ({'action': 'presence', 'time': 1687977564.7145743, 'user': {'account_name': 'Guest'}},),{}модуль __main__вызов из функции <module>вызов из функцииmain
+2023-06-28 22:39:24,715 INFO server.py Cформирован ответ клиенту {'response': 200}
+2023-06-28 22:39:24,716 DEBUG server.py Соединение с клиентом ('127.0.0.1', 41758) закрывается.
