@@ -1,0 +1,6 @@
+2023-06-28 23:12:04,113 INFO server.py Установлено соедение с ПК ('127.0.0.1', 43364)
+2023-06-28 23:12:04,114 DEBUG server.py Получено сообщение {'action': 'presence', 'time': 1687979524.113413, 'user': {'account_name': 'Guest'}}
+2023-06-28 23:12:04,119 DEBUG server.py Разбор сообщения от клиента : {'action': 'presence', 'time': 1687979524.113413, 'user': {'account_name': 'Guest'}}
+2023-06-28 23:12:04,120 DEBUG decorator.py Была вызвана функция process_client_message c параметрами ({'action': 'presence', 'time': 1687979524.113413, 'user': {'account_name': 'Guest'}},), {}. Вызов из модуля __main__. Вызов из функции main(.Вызов из функции main
+2023-06-28 23:12:04,120 INFO server.py Cформирован ответ клиенту {'response': 200}
+2023-06-28 23:12:04,133 DEBUG server.py Соединение с клиентом ('127.0.0.1', 43364) закрывается.
