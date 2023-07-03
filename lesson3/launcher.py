@@ -24,34 +24,48 @@ while True:
             "./server.py",
             ])
         )
-        print(p)
+
         time.sleep(0.1)
-        for i in range(2):
-            p = f'python "{catalog}/client.py"  userS{i}'
-            PROCESS.append(subprocess.Popen([
+
+
+        PROCESS.append(subprocess.Popen([
                 'gnome-terminal',
                 "--disable-factory",
             "--",
             "python",
             "./client.py",
-                "-m",
-                "send",
+                "-n",
+               "test1",
+
             ])
             )
-            print(p)
-            time.sleep(0.1)
-        for i in range(1):
-            p = f'python "{catalog}/client.py" -m listen -u userL{i}'
-            PROCESS.append(subprocess.Popen([
+
+        time.sleep(0.1)
+
+        PROCESS.append(subprocess.Popen([
                 'gnome-terminal',
                 "--disable-factory",
             "--",
             "python",
             "./client.py",
+                "-n",
+            "test2",
             ])
             )
-            print(p)
-            time.sleep(0.1)
+
+        time.sleep(0.1)
+        PROCESS.append(subprocess.Popen([
+            'gnome-terminal',
+            "--disable-factory",
+            "--",
+            "python",
+            "./client.py",
+            "-n",
+            "test3",
+        ])
+        )
+
+        time.sleep(0.1)
     elif ACTION == 'x':
         while PROCESS:
             VICTIM = PROCESS.pop()
