@@ -1,6 +1,5 @@
 """Данный вариант будет рабоать только у меня(ну может еще у кого запустится)"""
 
-
 import os
 import subprocess
 import time
@@ -14,46 +13,46 @@ while True:
     if ACTION == 'q':
         break
     elif ACTION == 's':
-        catalog = os.getcwd()
-        p = f'python "{catalog}/server.py"'
+
         PROCESS.append(subprocess.Popen([
             'gnome-terminal',
 
             "--",
             "python",
             "./server.py",
-            ])
+        ])
         )
 
         time.sleep(0.1)
 
 
         PROCESS.append(subprocess.Popen([
-                'gnome-terminal',
-                "--disable-factory",
+            'gnome-terminal',
+            "--disable-factory",
             "--",
             "python",
             "./client.py",
-                "-n",
-               "test1",
+            "-n",
+            "test1",
 
-            ])
-            )
-
+        ])
+        )
         time.sleep(0.1)
 
         PROCESS.append(subprocess.Popen([
-                'gnome-terminal',
-                "--disable-factory",
+            'gnome-terminal',
+            "--disable-factory",
             "--",
             "python",
             "./client.py",
-                "-n",
+            "-n",
             "test2",
-            ])
-            )
+
+        ])
+        )
 
         time.sleep(0.1)
+
         PROCESS.append(subprocess.Popen([
             'gnome-terminal',
             "--disable-factory",
