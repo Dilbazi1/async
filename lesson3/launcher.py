@@ -1,6 +1,5 @@
 """Данный вариант будет рабоать только у меня(ну может еще у кого запустится)"""
 
-
 import os
 import subprocess
 import time
@@ -14,44 +13,58 @@ while True:
     if ACTION == 'q':
         break
     elif ACTION == 's':
-        catalog = os.getcwd()
-        p = f'python "{catalog}/server.py"'
+
         PROCESS.append(subprocess.Popen([
             'gnome-terminal',
 
             "--",
             "python",
             "./server.py",
-            ])
+        ])
         )
-        print(p)
+
         time.sleep(0.1)
-        for i in range(2):
-            p = f'python "{catalog}/client.py"  userS{i}'
-            PROCESS.append(subprocess.Popen([
-                'gnome-terminal',
-                "--disable-factory",
+
+
+        PROCESS.append(subprocess.Popen([
+            'gnome-terminal',
+            "--disable-factory",
             "--",
             "python",
             "./client.py",
-                "-m",
-                "send",
-            ])
-            )
-            print(p)
-            time.sleep(0.1)
-        for i in range(1):
-            p = f'python "{catalog}/client.py" -m listen -u userL{i}'
-            PROCESS.append(subprocess.Popen([
-                'gnome-terminal',
-                "--disable-factory",
+            "-n",
+            "test1",
+
+        ])
+        )
+        time.sleep(0.1)
+
+        PROCESS.append(subprocess.Popen([
+            'gnome-terminal',
+            "--disable-factory",
             "--",
             "python",
             "./client.py",
-            ])
-            )
-            print(p)
-            time.sleep(0.1)
+            "-n",
+            "test2",
+
+        ])
+        )
+
+        time.sleep(0.1)
+
+        PROCESS.append(subprocess.Popen([
+            'gnome-terminal',
+            "--disable-factory",
+            "--",
+            "python",
+            "./client.py",
+            "-n",
+            "test3",
+        ])
+        )
+
+        time.sleep(0.1)
     elif ACTION == 'x':
         while PROCESS:
             VICTIM = PROCESS.pop()
