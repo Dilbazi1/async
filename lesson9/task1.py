@@ -42,9 +42,9 @@ def host_range_ping_tab(start_ip, stop_ip):
                    tablefmt="pipe",
                    stralign="center", ))
 
+if __name__ == '__main__':
+ hosts = ['192.168.0.1', '192.168.0.8', 'google.com', 'mail.ru']
 
-hosts = ['192.168.0.1', '192.168.0.8', 'google.com', 'mail.ru']
-
-print(host_ping(hosts))
-print(host_range_ping('5.255.255.70', '5.255.255.80'))
-print(host_range_ping_tab('5.255.255.70', '5.255.255.80'))
+ print(host_ping(hosts))
+ print(host_range_ping('5.255.255.70', '5.255.255.80'))
+ print(host_range_ping_tab('5.255.255.70', '5.255.255.80'))
