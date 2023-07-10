@@ -12,7 +12,7 @@ from common.utils import *
 from common.variables import *
 from descript import Port
 from decorator import  Log
-from mateclasses import ServerMaker
+from metaclasses import ServerMaker
 
 LOGGER = logging.getLogger('server')
 
@@ -27,7 +27,8 @@ def arg_parser():
     listen_port = namespace.p
     return listen_address, listen_port
 class Server(metaclass=ServerMaker):
-    port=Port()
+    port = Port()
+
 
     def __init__(self,listen_address,listen_port):
         # Параментры подключения

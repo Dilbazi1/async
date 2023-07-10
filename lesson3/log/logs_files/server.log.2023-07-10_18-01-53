@@ -1,0 +1,9 @@
+2023-07-10 18:01:53,634 INFO server.py Установлено соедение с ПК ('127.0.0.1', 37748)
+2023-07-10 18:01:53,634 DEBUG decorator.py Была вызвана функция get_message c параметрами (<socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 37748)>,), {}. Вызов из модуля common.utils
+2023-07-10 18:01:53,634 DEBUG server.py Разбор сообщения от клиента : {'action': 'presence', 'time': 1688997713.6337664, 'user': {'account_name': 'test1'}}
+2023-07-10 18:01:53,634 DEBUG decorator.py Была вызвана функция send_message c параметрами (<socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 37748)>, {'response': 400, 'error': 'Имя пользователя уже занято.'}), {}. Вызов из модуля common.utils
+2023-07-10 18:01:53,829 INFO server.py Установлено соедение с ПК ('127.0.0.1', 37752)
+2023-07-10 18:01:53,829 DEBUG decorator.py Была вызвана функция get_message c параметрами (<socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 37752)>,), {}. Вызов из модуля common.utils
+2023-07-10 18:01:53,829 DEBUG server.py Разбор сообщения от клиента : {'action': 'presence', 'time': 1688997713.8294847, 'user': {'account_name': 'test2'}}
+2023-07-10 18:01:53,830 DEBUG decorator.py Была вызвана функция send_message c параметрами (<socket.socket fd=9, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 37752)>, {'response': 400, 'error': 'Имя пользователя уже занято.'}), {}. Вызов из модуля common.utils
+2023-07-10 18:01:53,856 INFO server.py Установлено соедение с ПК ('127.0.0.1', 37764)
