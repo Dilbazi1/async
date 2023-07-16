@@ -1,3 +1,4 @@
+import os
 import socket
 import sys
 import argparse
@@ -7,6 +8,7 @@ import log.logs_config.server_config
 import time
 import select
 import threading
+import configparser
 
 from errors import IncorrectDataRecivedError
 from errors import ReqFieldMissingError, ServerError
@@ -18,6 +20,8 @@ from metaclasses import ServerMaker
 from server_database import ServerStorage
 
 LOGGER = logging.getLogger('server')
+new_connection=False
+conflag_lock=threading.Lock()
 
 @Log()
 def arg_parser():
@@ -64,7 +68,7 @@ class Server(threading.Thread,metaclass=ServerMaker):
         self.sock=transport
         self.sock.listen()
 
-    def main_loop(self):
+    def run(self):
         # Инициализация Сокета
         self.init_socket()
 
@@ -86,7 +90,7 @@ class Server(threading.Thread,metaclass=ServerMaker):
                 if self.clients:
                     recv_data_lst, send_data_lst, err_lst = select.select(self.clients, self.clients, [], 0)
             except OSError:
-                pass
+                LOGGER.error(f'Ошибка работы с сокетами: {OSError}')
 
                 # принимаем сообщения и если ошибка, исключаем клиента.
                 if recv_data_lst:
@@ -97,15 +101,21 @@ class Server(threading.Thread,metaclass=ServerMaker):
                         except :
                             LOGGER.info(f'Клиент {client_with_message.getpeername()} '
                                         f'отключился от сервера.')
+                            for name in self.names:
+                                if self.names[name] == client_with_message:
+                                    self.database.user_logout(name)
+                                    del self.names[name]
+                                    break
                             self.clients.remove(client_with_message)
 
                 # Если есть сообщения, обрабатываем каждое.
                 for message  in self.messages:
                     try:
                         self.process_message(message, send_data_lst)
-                    except Exception:
+                    except (ConnectionAbortedError, ConnectionError, ConnectionResetError, ConnectionRefusedError):
                         LOGGER.info(f'Связь с клиентом с именем {message[DESTINATION]} была потеряна')
                         self.clients.remove(self.names[message[DESTINATION]])
+                        self.database.user_logout(message[DESTINATION])
                         del self.names[message[DESTINATION]]
                 self.messages.clear()
 
@@ -143,6 +153,7 @@ class Server(threading.Thread,metaclass=ServerMaker):
             :param names:
             :return:
         """
+        global new_connection
         LOGGER.debug(f'Разбор сообщения от клиента : {message}')
         # Если это сообщение о присутствии, принимаем и отвечаем
         if ACTION in message and message[ACTION] == PRESENCE and \
@@ -165,16 +176,36 @@ class Server(threading.Thread,metaclass=ServerMaker):
         # Ответ не требуется.
         elif ACTION in message and message[ACTION] == MESSAGE and \
             DESTINATION in message and TIME in message \
-            and SENDER in message and MESSAGE_TEXT in message:
+            and SENDER in message and MESSAGE_TEXT in message and self.names[message[ACCOUNT_NAME]]==client:
             self.messages.append(message)
+            self.database.process_message(message[SENDER], message[DESTINATION])
             return
         # Если клиент выходит
-        elif ACTION in message and message[ACTION] == EXIT and ACCOUNT_NAME in message:
+        elif ACTION in message and message[ACTION] == EXIT and ACCOUNT_NAME in message and self.names[message[ACCOUNT_NAME]]==client:
+
             self.database.user_logout(message[ACCOUNT_NAME])
+            LOGGER.info(f'Клиент {message[ACCOUNT_NAME]} корректно отключился от сервера.')
             self.clients.remove(self.names[message[ACCOUNT_NAME]])
             self.names[message[ACCOUNT_NAME]].close()
             del self.names[message[ACCOUNT_NAME]]
+            with conflag_lock:
+                new_connection=True
             return
+        elif ACTION in message and message[ACTION]==GET_CONTACTS and USER in message and self.names[message[USER]]==client:
+            response=RESPONSE_202
+            response[LIST_INFO]=self.database.get_contacts(message[USER])
+            send_message(client,response)
+
+        elif ACTION in message and message[ACTION]==ADD_CONTACT and ACCOUNT_NAME in message and USER in message and self.names[message[USER]]==client:
+            self.database.add_contact(message[USER],message[ACCOUNT_NAME])
+            send_message(client,RESPONSE_200)
+        elif ACTION in message and message[ACTION] == REMOVE_CONTACT and ACCOUNT_NAME in message and USER in message and self.names[message[USER]] == client:
+            self.database.remove_contact(message[USER], message[ACCOUNT_NAME])
+            send_message(client,RESPONSE_200)
+        elif ACTION in message and message[ACTION]==USERS_REQUEST and ACCOUNT_NAME in message and self.names[message[ACCOUNT_NAME]]==client:
+             response=RESPONSE_202
+             response[LIST_INFO]=[user[0] for user in self.database.users_list()]
+             send_message(client,response)
         # Иначе отдаём Bad request
         else:
             response = RESPONSE_400
@@ -197,9 +228,15 @@ def main():
     Загрузка параметров командной строки, если нет параметров, то задаём значения по умоланию
     :return:
     """
-    listen_address, listen_port = arg_parser()
+    config = configparser.ConfigParser()
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    config.read(f"{dir_path}/{'server.ini'}")
+    listen_address, listen_port = arg_parser( config['SETTINGS']['Default_port'], config['SETTINGS']['Listen_Address'])
     # Инициализация базы данных
-    database = ServerStorage()
+    database = ServerStorage(os.path.join(
+            config['SETTINGS']['Database_path'],
+            config['SETTINGS']['Database_file']))
 
     # Создание экземпляра класса - сервера и его запуск:
     server = Server(listen_address, listen_port, database)
