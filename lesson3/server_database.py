@@ -34,13 +34,13 @@ class ServerStorage:
             self.ip = ip
             self.port = port
 
-        class UsersContacts:
+    class UsersContacts:
             def __init__(self, user, contact):
                 self.id = None
                 self.user = user
                 self.contact = contact
 
-        class UsersHistory:
+    class UsersHistory:
             def __init__(self, user):
                 self.id = None
                 self.user = user
