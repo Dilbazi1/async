@@ -1,16 +1,9 @@
 import os
 import socket
-import sys
 import argparse
-import json
-import logging
-import log.logs_config.server_config
-import time
 import select
 import threading
 import configparser
-from errors import IncorrectDataRecivedError
-from errors import ReqFieldMissingError, ServerError
 from common.utils import *
 from common.variables import *
 from descript import Port
@@ -20,7 +13,6 @@ from server_database import ServerStorage
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtCore import QTimer
 from server_gui import MainWindow, gui_create_model, HistoryWindow, create_stat_model, ConfigWindow
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
 LOGGER = logging.getLogger('server')
 new_connection = False

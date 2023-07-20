@@ -1,13 +1,8 @@
 import argparse
-import logging
-import sys
-import json
 import socket
 import time
-import dis
 import threading
-import log.logs_config.client_config
-from errors import ReqFieldMissingError, ServerError, IncorrectDataRecivedError
+from errors import ReqFieldMissingError, ServerError
 from common.utils import *
 from common.variables import *
 from decorator import log
