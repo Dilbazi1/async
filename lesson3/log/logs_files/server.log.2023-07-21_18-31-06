@@ -1,0 +1,4 @@
+2023-07-21 18:31:06,628 INFO server.py Установлено соедение с ПК ('127.0.0.1', 60698)
+2023-07-21 18:31:06,628 DEBUG decorator.py Была вызвана функция get_message c параметрами (<socket.socket fd=21, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 60698)>,), {}. Вызов из модуля common.utils
+2023-07-21 18:31:06,628 DEBUG server.py Разбор сообщения от клиента : {'action': 'presence', 'time': 1689949866.628154, 'user': {'account_name': '1'}}
+2023-07-21 18:31:06,647 DEBUG decorator.py Была вызвана функция send_message c параметрами (<socket.socket fd=21, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 60698)>, {'response': 200}), {}. Вызов из модуля common.utils

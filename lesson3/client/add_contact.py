@@ -44,7 +44,7 @@ class AddContactDialog(QDialog):
         # Assign an action to the refresh button
         self.btn_refresh.clicked.connect(self.update_possible_contacts)
     # Populate the list of possible contacts with the difference between all users
-    def possiple_contacts_update(self):
+    def possible_contacts_update(self):
         self.selector.clear()
         # sets of all contacts and customer contacts
         contact_list=set(self.database.get_contacts())
