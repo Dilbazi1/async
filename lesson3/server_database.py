@@ -178,7 +178,7 @@ class ServerStorage:
 
         if not contact or self.session.query(self.UsersContacts).filter_by(user=user.id, contact=contact.id).count():
             return
-        contact_row = self.UsersContacs(user.id, contact.id)
+        contact_row = self.UsersContacts(user.id, contact.id)
         self.session.add(contact_row)
         self.session.commit()
 
@@ -227,7 +227,7 @@ class ServerStorage:
         return query.all()
     def get_contacts(self,username):
         user=self.session.query(self.AllUsers).filter_by(name=username).one()
-        query=self.session.query(self.UsersContacs,
+        query=self.session.query(self.UsersContacts,
             self.AllUsers.name).filter_by(user=user.id).join(self.AllUsers,self.UsersContacts.contact==self.AllUsers.id)
         return [contact[1] for contact in query.all()]
 
