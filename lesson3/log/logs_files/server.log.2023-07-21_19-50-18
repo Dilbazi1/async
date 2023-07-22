@@ -1,0 +1,3 @@
+2023-07-21 19:50:18,019 DEBUG decorator.py Была вызвана функция get_message c параметрами (<socket.socket fd=21, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 36614)>,), {}. Вызов из модуля common.utils
+2023-07-21 19:50:18,020 DEBUG server.py Разбор сообщения от клиента : {'action': 'get_contacts', 'time': 1689954617.5582583, 'user': 'g'}
+2023-07-21 19:50:18,021 INFO server.py Клиент ('127.0.0.1', 36614) отключился от сервера.

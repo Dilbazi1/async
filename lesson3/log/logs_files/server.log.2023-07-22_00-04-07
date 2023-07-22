@@ -1,0 +1,2 @@
+2023-07-22 00:04:07,215 DEBUG decorator.py Была вызвана функция get_message c параметрами (<socket.socket fd=21, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 43958)>,), {}. Вызов из модуля common.utils
+2023-07-22 00:04:07,216 DEBUG server.py Разбор сообщения от клиента : {'action': 'add', 'time': 1689969846.9066505, 'user': 'l', 'account_name': 'test4'}

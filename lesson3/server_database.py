@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, ForeignKey, DateTime
 from sqlalchemy.orm import mapper, sessionmaker
 from common.variables import *
@@ -54,6 +56,7 @@ class ServerStorage:
         # echo=False - отключаем ведение лога (вывод sql-запросов)
         # pool_recycle - По умолчанию соединение с БД через 8 часов простоя обрывается.
         # Чтобы это не случилось нужно добавить опцию pool_recycle = 7200 (переуст-ка соед-я через 2 часа)
+
         self.database_engine = create_engine(f'sqlite:///{path}', echo=False, pool_recycle=7200,
                                              connect_args={'check_same_thread': False})
 
@@ -175,7 +178,7 @@ class ServerStorage:
 
         if not contact or self.session.query(self.UsersContacts).filter_by(user=user.id, contact=contact.id).count():
             return
-        contact_row = self.UsersContacs(user.id, contact.id)
+        contact_row = self.UsersContacts(user.id, contact.id)
         self.session.add(contact_row)
         self.session.commit()
 
@@ -224,7 +227,7 @@ class ServerStorage:
         return query.all()
     def get_contacts(self,username):
         user=self.session.query(self.AllUsers).filter_by(name=username).one()
-        query=self.session.query(self.UsersContacs,
+        query=self.session.query(self.UsersContacts,
             self.AllUsers.name).filter_by(user=user.id).join(self.AllUsers,self.UsersContacts.contact==self.AllUsers.id)
         return [contact[1] for contact in query.all()]
 
