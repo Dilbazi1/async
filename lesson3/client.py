@@ -1,18 +1,10 @@
 #
-import logging
-import log.logs_config.client_config
-import sys
 import argparse
 
-import socket
-import time
-import threading
-
-from errors import ReqFieldMissingError, ServerError
+from errors import ServerError
 from common.utils import *
 from common.variables import *
 from common.decorator import log
-from metaclasses import ClientMaker
 
 from client.client_database  import ClientDatabase
 from client.transport import ClientTransport
