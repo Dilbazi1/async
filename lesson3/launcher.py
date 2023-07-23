@@ -1,71 +1,36 @@
-"""Данный вариант будет рабоать только у меня(ну может еще у кого запустится)"""
-
 import os
-import subprocess
-import time
+import signal
+from subprocess import Popen
 
-PROCESS = []
+
+process_list = []
+
+print(
+    f"Start some count of clients (number of clients)\nClose all cliets (q)\nExit (anything)"
+)
 
 while True:
-    ACTION = input('Выберите действие: q - выход, '
-                   's - запустить сервер и клиенты, x - закрыть все окна: ')
-
-    if ACTION == 'q':
+    choise = input("Your choise: ")
+    if choise.isdigit():
+        cmd = [
+            "gnome-terminal",
+            "--disable-factory",
+            "--",
+            "python",
+            "./client.py",
+            "-n",
+            "127.0.0.1",
+        ]
+        for i in range(int(choise)):
+            process_list.append(
+                Popen(
+                    cmd,
+                    preexec_fn=os.setpgrp,
+                )
+            )
+    elif choise == "q":
+        while process_list:
+            process = process_list.pop()
+            os.killpg(process.pid, signal.SIGINT)
+    else:
         break
-    elif ACTION == 's':
-
-        PROCESS.append(subprocess.Popen([
-            'gnome-terminal',
-
-            "--",
-            "python",
-            "./server.py",
-        ])
-        )
-
-        time.sleep(0.1)
-
-
-        PROCESS.append(subprocess.Popen([
-            'gnome-terminal',
-            "--disable-factory",
-            "--",
-            "python",
-            "./client.py",
-            "-n",
-            "test1",
-
-        ])
-        )
-        time.sleep(0.1)
-
-        PROCESS.append(subprocess.Popen([
-            'gnome-terminal',
-            "--disable-factory",
-            "--",
-            "python",
-            "./client.py",
-            "-n",
-            "test2",
-
-        ])
-        )
-
-        time.sleep(0.1)
-
-        PROCESS.append(subprocess.Popen([
-            'gnome-terminal',
-            "--disable-factory",
-            "--",
-            "python",
-            "./client.py",
-            "-n",
-            "test3",
-        ])
-        )
-
-        time.sleep(0.1)
-    elif ACTION == 'x':
-        while PROCESS:
-            VICTIM = PROCESS.pop()
-            VICTIM.kill()

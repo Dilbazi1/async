@@ -12,11 +12,17 @@ from common.descript import Port
 from common.variables import *
 from common.utils import send_message, get_message
 from common.decorator import login_required
-# Инициализация логирования сервера.
+
+# Загрузка логера
 logger = logging.getLogger('server')
 
-# Основной класс сервера
+
 class MessageProcessor(threading.Thread):
+    '''
+    Основной класс сервера. Принимает содинения, словари - пакеты
+    от клиентов, обрабатывает поступающие сообщения.
+    Работает в качестве отдельного потока.
+    '''
     port = Port()
 
     def __init__(self, listen_address, listen_port, database):
@@ -32,6 +38,7 @@ class MessageProcessor(threading.Thread):
 
         # Список подключённых клиентов.
         self.clients = []
+
         # Сокеты
         self.listen_sockets = None
         self.error_sockets = None
@@ -46,12 +53,12 @@ class MessageProcessor(threading.Thread):
         super().__init__()
 
     def run(self):
+        '''Метод основной цикл потока.'''
         # Инициализация Сокета
-
         self.init_socket()
 
         # Основной цикл программы сервера
-        while True:
+        while self.running:
             # Ждём подключения, если таймаут вышел, ловим исключение.
             try:
                 client, client_address = self.sock.accept()
@@ -68,9 +75,10 @@ class MessageProcessor(threading.Thread):
             # Проверяем на наличие ждущих клиентов
             try:
                 if self.clients:
-                    recv_data_lst, send_data_lst, err_lst = select.select(self.clients, self.clients, [], 0)
+                    recv_data_lst, self.listen_sockets, self.error_sockets = select.select(
+                        self.clients, self.clients, [], 0)
             except OSError as err:
-                logger.error(f'Ошибка работы с сокетами: {err}')
+                logger.error(f'Ошибка работы с сокетами: {err.errno}')
 
             # принимаем сообщения и если ошибка, исключаем клиента.
             if recv_data_lst:
@@ -94,7 +102,9 @@ class MessageProcessor(threading.Thread):
                 break
         self.clients.remove(client)
         client.close()
+
     def init_socket(self):
+        '''Метод инициализатор сокета.'''
         logger.info(
             f'Запущен сервер, порт для подключений: {self.port} , адрес с которого принимаются подключения: {self.addr}. Если адрес не указан, принимаются соединения с любых адресов.')
         # Готовим сокет
@@ -106,28 +116,28 @@ class MessageProcessor(threading.Thread):
         self.sock = transport
         self.sock.listen(MAX_CONNECTIONS)
 
-        # Функция адресной отправки сообщения определённому клиенту. Принимает словарь сообщение, список зарегистрированых
-        # пользователей и слушающие сокеты. Ничего не возвращает.
     def process_message(self, message):
-            if message[DESTINATION] in self.names and self.names[message[DESTINATION]] in self.listen_socks:
-                try:
-                    send_message(self.names[message[DESTINATION]], message)
-                    logger.info(
+        '''
+        Метод отправки сообщения клиенту.
+        '''
+        if message[DESTINATION] in self.names and self.names[message[DESTINATION]
+        ] in self.listen_sockets:
+            try:
+                send_message(self.names[message[DESTINATION]], message)
+                logger.info(
                     f'Отправлено сообщение пользователю {message[DESTINATION]} от пользователя {message[SENDER]}.')
-                except OSError:
-                    self.remove_client(message[DESTINATION])
-            elif message[DESTINATION] in self.names and self.names[message[DESTINATION]] not in self.listen_socks:
-                logger.error(
-                    f'Связь с клиентом {message[DESTINATION]} была потеряна. Соединение закрыто, доставка невозможна.')
-                self.remove_client(self.names[message[DESTINATION]])
-            else:
-                logger.error(
-                    f'Пользователь {message[DESTINATION]} не зарегистрирован на сервере, отправка сообщения невозможна.')
-            # Обработчик сообщений от клиентов, принимает словарь - сообщение от клиента, проверяет корректность, отправляет
-            #     словарь-ответ в случае необходимости.
+            except OSError:
+                self.remove_client(message[DESTINATION])
+        elif message[DESTINATION] in self.names and self.names[message[DESTINATION]] not in self.listen_sockets:
+            logger.error(
+                f'Связь с клиентом {message[DESTINATION]} была потеряна. Соединение закрыто, доставка невозможна.')
+            self.remove_client(self.names[message[DESTINATION]])
+        else:
+            logger.error(
+                f'Пользователь {message[DESTINATION]} не зарегистрирован на сервере, отправка сообщения невозможна.')
 
+    @login_required
     def process_client_message(self, message, client):
-
         '''Метод отбработчик поступающих сообщений.'''
         logger.debug(f'Разбор сообщения от клиента : {message}')
         # Если это сообщение о присутствии, принимаем и отвечаем

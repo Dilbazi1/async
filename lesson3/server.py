@@ -21,14 +21,16 @@ logger = logging.getLogger('server')
 
 
 # Парсер аргументов коммандной строки.
+
 @log
 def arg_parser(default_port, default_address):
+    '''Парсер аргументов коммандной строки.'''
     logger.debug(
         f'Инициализация парсера аргументов коммандной строки: {sys.argv}')
-
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', default=default_port, type=int, nargs='?')
     parser.add_argument('-a', default=default_address, nargs='?')
+    parser.add_argument('--no_gui', action='store_true')
     namespace = parser.parse_args(sys.argv[1:])
     listen_address = namespace.a
     listen_port = namespace.p

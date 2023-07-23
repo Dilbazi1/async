@@ -1,0 +1,4 @@
+2023-07-23 22:14:06,817 INFO core.py Установлено соедение с ПК ('127.0.0.1', 47054)
+2023-07-23 22:14:06,818 DEBUG decorator.py Была вызвана функция get_message c параметрами (<socket.socket fd=21, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 47054)>,), {}. Вызов из модуля common.utils
+2023-07-23 22:14:06,818 DEBUG core.py Разбор сообщения от клиента : {'action': 'presence', 'time': 1690136046.8176293, 'user': {'account_name': '2'}}
+2023-07-23 22:14:06,818 DEBUG core.py Start auth process for {'account_name': '2'}
