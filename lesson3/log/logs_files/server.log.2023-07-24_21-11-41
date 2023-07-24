@@ -1,0 +1,3 @@
+2023-07-24 21:11:41,242 DEBUG decorator.py Была вызвана функция get_message c параметрами (<socket.socket fd=22, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 45578)>,) , {}. Вызов из модуля common.utils
+2023-07-24 21:11:41,243 DEBUG core.py Разбор сообщения от клиента : {'action': 'exit', 'time': 1690218701.1547072, 'account_name': 'test4'}
+2023-07-24 21:11:41,243 INFO core.py Клиент ('127.0.0.1', 45578) отключился от сервера.

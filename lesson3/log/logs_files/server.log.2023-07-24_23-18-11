@@ -1,0 +1,3 @@
+2023-07-24 23:18:11,095 DEBUG decorator.py Была вызвана функция get_message c параметрами (<socket.socket fd=21, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 38412)>,) , {}. Вызов из модуля common.utils
+2023-07-24 23:18:11,096 DEBUG core.py Разбор сообщения от клиента : {'action': 'pubkey_need', 'time': 1690226290.957754, 'account_name': 'test2'}
+2023-07-24 23:18:11,101 DEBUG decorator.py Была вызвана функция send_message c параметрами (<socket.socket fd=21, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 38412)>, {'response': 400, 'error': 'Нет публичного ключа для данного пользователя'}) , {}. Вызов из модуля common.utils

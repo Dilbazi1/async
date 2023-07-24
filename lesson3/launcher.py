@@ -1,36 +1,32 @@
+import subprocess
+import shlex
+import time
 import os
 import signal
-from subprocess import Popen
 
 
-process_list = []
-
-print(
-    f"Start some count of clients (number of clients)\nClose all cliets (q)\nExit (anything)"
-)
+PROCESS = []
 
 while True:
-    choise = input("Your choise: ")
-    if choise.isdigit():
-        cmd = [
-            "gnome-terminal",
-            "--disable-factory",
-            "--",
-            "python",
-            "./client.py",
-            "-n",
-            "127.0.0.1",
-        ]
-        for i in range(int(choise)):
-            process_list.append(
-                Popen(
-                    cmd,
-                    preexec_fn=os.setpgrp,
-                )
-            )
-    elif choise == "q":
-        while process_list:
-            process = process_list.pop()
-            os.killpg(process.pid, signal.SIGINT)
-    else:
+
+    ANSWER = input('Выберите действие: q - выход, s - запустить сервер и клиенты, x - закрыть все окна: ')
+
+    if ANSWER == 'q':
         break
+    elif ANSWER == 's':
+        PROCESS.append(subprocess.Popen('gnome-terminal -- python3 server.py', shell=True))
+        time.sleep(0.5)
+    elif ANSWER=='k':
+        print('Убедитесь, что на сервере зарегистрировано необходимо количество клиентов с паролем 123456.')
+        print('Первый запуск может быть достаточно долгим из-за генерации ключей!')
+        clients_count = int(
+            input('Введите количество тестовых клиентов для запуска: '))
+        # Запускаем клиентов:
+        for i in range(clients_count):
+            PROCESS.append(subprocess.Popen(f'gnome-terminal -- python3 client.py -n test{i+1} -p 123456', shell=True))
+
+    elif ANSWER == 'x':
+        while PROCESS:
+            VICTIM = PROCESS.pop()
+            VICTIM.kill()
+            VICTIM.terminate()

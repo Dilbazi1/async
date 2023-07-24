@@ -1,0 +1,3 @@
+2023-07-24 20:58:46,905 DEBUG decorator.py Была вызвана функция get_message c параметрами (<socket.socket fd=21, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 53708)>,) , {}. Вызов из модуля common.utils
+2023-07-24 20:58:46,905 DEBUG core.py Разбор сообщения от клиента : {'action': 'add', 'time': 1690217926.3901584, 'user': 'test3', 'account_name': ''}
+2023-07-24 20:58:46,906 DEBUG decorator.py Была вызвана функция send_message c параметрами (<socket.socket fd=21, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 53708)>, {'response': 200}) , {}. Вызов из модуля common.utils
