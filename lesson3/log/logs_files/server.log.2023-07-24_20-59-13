@@ -1,0 +1,1 @@
+2023-07-24 20:59:13,889 DEBUG decorator.py Была вызвана функция send_message c параметрами (<socket.socket fd=21, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 7777), raddr=('127.0.0.1', 53708)>, {'response': 205}) , {}. Вызов из модуля common.utils
