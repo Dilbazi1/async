@@ -1,29 +1,31 @@
-from PyQt5.QtWidgets import QDialog,QPushButton,QLineEdit,QApplication,QLabel,qApp
+from PyQt5.QtWidgets import QDialog, QPushButton, QLineEdit, QApplication, QLabel, qApp
 from PyQt5.QtCore import QEvent
+
+
 # Start dialog with username selection
 class UserNameDialog(QDialog):
     def __init__(self):
         super().__init__()
 
-        self.ok_pressed=False
+        self.ok_pressed = False
 
         self.setWindowTitle('Привет!')
-        self.setFixedSize(175,135)
+        self.setFixedSize(175, 135)
 
-        self.label=QLabel('Введите имя пользователя:', self)
-        self.label.move(10,10)
-        self.label.setFixedSize(150,10)
+        self.label = QLabel('Введите имя пользователя:', self)
+        self.label.move(10, 10)
+        self.label.setFixedSize(150, 10)
 
-        self.client_name=QLineEdit(self)
-        self.client_name.setFixedSize(154,20)
-        self.client_name.move(10,30)
+        self.client_name = QLineEdit(self)
+        self.client_name.setFixedSize(154, 20)
+        self.client_name.move(10, 30)
 
-        self.btn_ok=QPushButton('Начать', self)
-        self.btn_ok.move(10,105)
+        self.btn_ok = QPushButton('Начать', self)
+        self.btn_ok.move(10, 105)
         self.btn_ok.clicked.connect(self.click)
 
-        self.btn_cancel=QPushButton('Выход', self)
-        self.btn_cancel.move(90,105)
+        self.btn_cancel = QPushButton('Выход', self)
+        self.btn_cancel.move(90, 105)
         self.btn_cancel.clicked.connect(qApp.exit)
 
         self.label_passwd = QLabel('Введите пароль:', self)
@@ -36,13 +38,15 @@ class UserNameDialog(QDialog):
         self.client_passwd.setEchoMode(QLineEdit.Password)
 
         self.show()
+
     # OK button handler, if the input field is not empty, set the flag and exit the application
     def click(self):
         if self.client_name.text() and self.client_passwd.text():
-            self.ok_pressed=True
+            self.ok_pressed = True
             qApp.exit()
-if __name__=="__main__":
-    app=QApplication([])
-    dial=UserNameDialog()
-    app.exec()
 
+
+if __name__ == "__main__":
+    app = QApplication([])
+    dial = UserNameDialog()
+    app.exec()

@@ -37,17 +37,17 @@ class ServerStorage:
             self.port = port
 
     class UsersContacts:
-            def __init__(self, user, contact):
-                self.id = None
-                self.user = user
-                self.contact = contact
+        def __init__(self, user, contact):
+            self.id = None
+            self.user = user
+            self.contact = contact
 
     class UsersHistory:
-            def __init__(self, user):
-                self.id = None
-                self.user = user
-                self.sent = 0
-                self.accepted = 0
+        def __init__(self, user):
+            self.id = None
+            self.user = user
+            self.sent = 0
+            self.accepted = 0
 
     def __init__(self, path):
         print(path)
@@ -118,7 +118,8 @@ class ServerStorage:
         self.session.commit()
 
     # Функция выполняющяяся при входе пользователя, записывает в базу факт входа
-    def user_login(self, username, ip_address, port):
+    def user_login(self, username, ip_address,
+                   port):
         print(username, ip_address, port)
         # Запрос в таблицу пользователей на наличие там пользователя с таким именем
         rez = self.session.query(self.AllUsers).filter_by(name=username)
@@ -225,14 +226,16 @@ class ServerStorage:
         if username:
             query = query.filter(self.AllUsers.name == username)
         return query.all()
-    def get_contacts(self,username):
-        user=self.session.query(self.AllUsers).filter_by(name=username).one()
-        query=self.session.query(self.UsersContacts,
-            self.AllUsers.name).filter_by(user=user.id).join(self.AllUsers,self.UsersContacts.contact==self.AllUsers.id)
+
+    def get_contacts(self, username):
+        user = self.session.query(self.AllUsers).filter_by(name=username).one()
+        query = self.session.query(self.UsersContacts,
+                                   self.AllUsers.name).filter_by(user=user.id).join(self.AllUsers,
+                                                                                    self.UsersContacts.contact == self.AllUsers.id)
         return [contact[1] for contact in query.all()]
 
     def message_history(self):
-        query=self.session.query(
+        query = self.session.query(
             self.AllUsers.name,
             self.AllUsers.last_login,
             self.UsersHistory.sent,

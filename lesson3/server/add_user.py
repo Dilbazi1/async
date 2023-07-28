@@ -86,6 +86,8 @@ class RegisterUser(QDialog):
             # Рассылаем клиентам сообщение о необходимости обновить справичники
             self.server.service_update_lists()
             self.close()
+
+
 if __name__ == '__main__':
     app = QApplication([])
     app.setAttribute(Qt.AA_DisableWindowContextHelpButton)

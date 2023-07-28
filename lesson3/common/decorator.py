@@ -1,8 +1,5 @@
 import inspect
 
-
-
-
 import log.logs_config.client_config
 import log.logs_config.server_config
 

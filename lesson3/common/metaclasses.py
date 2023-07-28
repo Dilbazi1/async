@@ -1,5 +1,6 @@
 import dis
 
+
 # Метакласс для проверки соответствия сервера:
 class ServerMaker(type):
     def __init__(self, clsname, bases, clsdict):
@@ -57,6 +58,7 @@ class ServerMaker(type):
             raise TypeError('Некорректная инициализация сокета.')
         # Обязательно вызываем конструктор предка:
         super().__init__(clsname, bases, clsdict)
+
 
 # Метакласс для проверки корректности клиентов:
 class ClientMaker(type):

@@ -6,11 +6,12 @@ from common.utils import *
 from common.variables import *
 from common.decorator import log
 from Cryptodome.PublicKey import RSA
-from client.client_database  import ClientDatabase
+from client.client_database import ClientDatabase
 from client.transport import ClientTransport
 from client.main_window import ClientMainWindow
 from client.start_dialog import UserNameDialog
-from PyQt5.QtWidgets import QApplication,QMessageBox
+from PyQt5.QtWidgets import QApplication, QMessageBox
+
 # Инициализация клиентского логера
 logger = logging.getLogger('client')
 
@@ -41,7 +42,6 @@ def arg_parser():
         exit(1)
 
     return server_address, server_port, client_name, client_passwd
-
 
 
 if __name__ == '__main__':
@@ -80,7 +80,7 @@ if __name__ == '__main__':
         with open(key_file, 'rb') as key:
             keys = RSA.import_key(key.read())
 
-    #!!!keys.publickey().export_key()
+    # !!!keys.publickey().export_key()
     logger.debug("Keys sucsessfully loaded.")
     # Создаём объект базы данных
     database = ClientDatabase(client_name)

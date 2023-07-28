@@ -26,7 +26,7 @@ class ClientTransport(threading.Thread, QObject):
     message_205 = pyqtSignal()
     connection_lost = pyqtSignal()
 
-    def __init__(self, port, ip_address, database, username , passwd, keys):
+    def __init__(self, port, ip_address, database, username, passwd, keys):
         # Call an ancestor constructor
         threading.Thread.__init__(self)
         QObject.__init__(self)
@@ -94,7 +94,6 @@ class ClientTransport(threading.Thread, QObject):
         # Получаем публичный ключ и декодируем его из байтов
         pubkey = self.keys.publickey().export_key().decode('ascii')
 
-
         # Авторизируемся на сервере
         with socket_lock:
             presense = {
@@ -129,7 +128,6 @@ class ClientTransport(threading.Thread, QObject):
             except (OSError, json.JSONDecodeError) as err:
                 LOGGER.debug(f'Connection error.', exc_info=err)
                 raise ServerError('Сбой соединения в процессе авторизации.')
-
 
     def process_server_ans(self, message):
         """

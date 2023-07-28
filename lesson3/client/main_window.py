@@ -7,30 +7,32 @@ import logging
 from Cryptodome.Cipher import PKCS1_OAEP
 from Cryptodome.PublicKey import RSA
 
-
 sys.path.append('../')
 from client.main_window_conv import Ui_MainClientWindow
 from client.add_contact import AddContactDialog
 from client.del_contact import DelContactDialog
-from client.client_database  import ClientDatabase
+from client.client_database import ClientDatabase
 from client.transport import ClientTransport
 from client.start_dialog import UserNameDialog
 from common.errors import ServerError
 from common.variables import *
 import base64
-logger=logging.getLogger('client')
+
+logger = logging.getLogger('client')
+
+
 # class main window
 class ClientMainWindow(QMainWindow):
-    def __init__(self,database,transport,keys):
+    def __init__(self, database, transport, keys):
         super().__init__()
         # main variables
-        self.database=database
-        self.transport=transport
+        self.database = database
+        self.transport = transport
         # объект - дешифорвщик сообщений с предзагруженным ключём
         self.decrypter = PKCS1_OAEP.new(keys)
 
         # Load the window configuration from the designer
-        self.ui=Ui_MainClientWindow()
+        self.ui = Ui_MainClientWindow()
         self.ui.setupUi(self)
         # "Exit" button
         self.ui.menu_exit.triggered.connect(qApp.exit)
@@ -53,11 +55,12 @@ class ClientMainWindow(QMainWindow):
         self.ui.list_messages.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.ui.list_messages.setWordWrap(True)
 
-        #Doubleclick on the contact list is sent to the handler
+        # Doubleclick on the contact list is sent to the handler
         self.ui.list_contacts.doubleClicked.connect(self.select_active_user)
         self.clients_list_update()
         self.set_disabled_input()
         self.show()
+
     # Deactivate input fields
     def set_disabled_input(self):
         #  inscription - recipient.
@@ -76,46 +79,47 @@ class ClientMainWindow(QMainWindow):
         self.current_chat_key = None
 
         # Filling in the message history.
+
     def history_list_update(self):
-            # Get history sorted by date
-            list = sorted(self.database.get_history(self.current_chat), key=lambda item: item[3])
-            # If the model is not created, create it.
-            if not self.history_model:
-                self.history_model = QStandardItemModel()
-                self.ui.list_messages.setModel(self.history_model)
-            # Clean up old posts
-            self.history_model.clear()
-            # We take no more than 20 recent entries.
-            length = len(list)
-            start_index = 0
-            if length > 20:
-                start_index = length - 20
-            # Filling the model with records, it is also worth separating incoming and outgoing ones with alignment and different backgrounds.
-            # Records are in reverse order, so we select them from the end and no more than 20
-            for i in range(start_index, length):
-                item = list[i]
-                if item[1] == 'in':
-                    mess = QStandardItem(f'Входящее от {item[3].replace(microsecond=0)}:\n {item[2]}')
-                    mess.setEditable(False)
-                    mess.setBackground(QBrush(QColor(255, 213, 213)))
-                    mess.setTextAlignment(Qt.AlignLeft)
-                    self.history_model.appendRow(mess)
-                else:
-                    mess = QStandardItem(f'Исходящее от {item[3].replace(microsecond=0)}:\n {item[2]}')
-                    mess.setEditable(False)
-                    mess.setTextAlignment(Qt.AlignRight)
-                    mess.setBackground(QBrush(QColor(204, 255, 204)))
-                    self.history_model.appendRow(mess)
-            self.ui.list_messages.scrollToBottom()
+        # Get history sorted by date
+        list = sorted(self.database.get_history(self.current_chat), key=lambda item: item[3])
+        # If the model is not created, create it.
+        if not self.history_model:
+            self.history_model = QStandardItemModel()
+            self.ui.list_messages.setModel(self.history_model)
+        # Clean up old posts
+        self.history_model.clear()
+        # We take no more than 20 recent entries.
+        length = len(list)
+        start_index = 0
+        if length > 20:
+            start_index = length - 20
+        # Filling the model with records, it is also worth separating incoming and outgoing ones with alignment and different backgrounds.
+        # Records are in reverse order, so we select them from the end and no more than 20
+        for i in range(start_index, length):
+            item = list[i]
+            if item[1] == 'in':
+                mess = QStandardItem(f'Входящее от {item[3].replace(microsecond=0)}:\n {item[2]}')
+                mess.setEditable(False)
+                mess.setBackground(QBrush(QColor(255, 213, 213)))
+                mess.setTextAlignment(Qt.AlignLeft)
+                self.history_model.appendRow(mess)
+            else:
+                mess = QStandardItem(f'Исходящее от {item[3].replace(microsecond=0)}:\n {item[2]}')
+                mess.setEditable(False)
+                mess.setTextAlignment(Qt.AlignRight)
+                mess.setBackground(QBrush(QColor(204, 255, 204)))
+                self.history_model.appendRow(mess)
+        self.ui.list_messages.scrollToBottom()
 
-        # Contact double click handler function
+    # Contact double click handler function
     def select_active_user(self):
-            # The user-selected (doubleclick) is on the selected item in the QListView
-            self.current_chat = self.ui.list_contacts.currentIndex().data()
-            # calling the main function
-            self.set_active_user()
+        # The user-selected (doubleclick) is on the selected item in the QListView
+        self.current_chat = self.ui.list_contacts.currentIndex().data()
+        # calling the main function
+        self.set_active_user()
 
-        # Function that sets the active interlocutor
+    # Function that sets the active interlocutor
     def set_active_user(self):
         '''Метод активации чата с собеседником.'''
         # Запрашиваем публичный ключ пользователя и создаём объект шифрования
@@ -148,27 +152,28 @@ class ClientMainWindow(QMainWindow):
         self.history_list_update()
 
         # Function to update the contact list
+
     def clients_list_update(self):
-            contacts_list = self.database.get_contacts()
-            self.contacts_model = QStandardItemModel()
-            for i in sorted(contacts_list):
-                item = QStandardItem(i)
-                item.setEditable(False)
-                self.contacts_model.appendRow(item)
-            self.ui.list_contacts.setModel(self.contacts_model)
+        contacts_list = self.database.get_contacts()
+        self.contacts_model = QStandardItemModel()
+        for i in sorted(contacts_list):
+            item = QStandardItem(i)
+            item.setEditable(False)
+            self.contacts_model.appendRow(item)
+        self.ui.list_contacts.setModel(self.contacts_model)
 
-        # Add contact function
+    # Add contact function
     def add_contact_window(self):
-            global select_dialog
-            select_dialog = AddContactDialog(self.transport, self.database)
-            select_dialog.btn_ok.clicked.connect(lambda: self.add_contact_action(select_dialog))
-            select_dialog.show()
+        global select_dialog
+        select_dialog = AddContactDialog(self.transport, self.database)
+        select_dialog.btn_ok.clicked.connect(lambda: self.add_contact_action(select_dialog))
+        select_dialog.show()
 
-        # Function - add handler, tells the server to update the table and contact list
+    # Function - add handler, tells the server to update the table and contact list
     def add_contact_action(self, item):
-            new_contact = item.selector.currentText()
-            self.add_contact(new_contact)
-            item.close()
+        new_contact = item.selector.currentText()
+        self.add_contact(new_contact)
+        item.close()
 
     # A function that adds a contact to the database
     def add_contact(self, new_contact):
@@ -188,6 +193,7 @@ class ClientMainWindow(QMainWindow):
             self.contacts_model.appendRow(new_contact)
             logger.info(f'Успешно добавлен контакт {new_contact}')
             self.messages.information(self, 'Успех', 'Контакт успешно добавлен.')
+
     # Delete contact function
 
     def delete_contact_window(self):
@@ -197,27 +203,28 @@ class ClientMainWindow(QMainWindow):
         remove_dialog.show()
 
         # Contact deletion handler function, reports to the server, updates the contact table
+
     def delete_contact(self, item):
-            selected = item.selector.currentText()
-            try:
-                self.transport.remove_contact(selected)
-            except ServerError as err:
-                self.messages.critical(self, 'Ошибка сервера', err.text)
-            except OSError as err:
-                if err.errno:
-                    self.messages.critical(self, 'Ошибка', 'Потеряно соединение с сервером!')
-                    self.close()
-                self.messages.critical(self, 'Ошибка', 'Таймаут соединения!')
-            else:
-                self.database.del_contact(selected)
-                self.clients_list_update()
-                logger.info(f'Успешно удалён контакт {selected}')
-                self.messages.information(self, 'Успех', 'Контакт успешно удалён.')
-                item.close()
-                # If the active user is deleted, then we deactivate the input fields.
-                if selected == self.current_chat:
-                    self.current_chat = None
-                    self.set_disabled_input()
+        selected = item.selector.currentText()
+        try:
+            self.transport.remove_contact(selected)
+        except ServerError as err:
+            self.messages.critical(self, 'Ошибка сервера', err.text)
+        except OSError as err:
+            if err.errno:
+                self.messages.critical(self, 'Ошибка', 'Потеряно соединение с сервером!')
+                self.close()
+            self.messages.critical(self, 'Ошибка', 'Таймаут соединения!')
+        else:
+            self.database.del_contact(selected)
+            self.clients_list_update()
+            logger.info(f'Успешно удалён контакт {selected}')
+            self.messages.information(self, 'Успех', 'Контакт успешно удалён.')
+            item.close()
+            # If the active user is deleted, then we deactivate the input fields.
+            if selected == self.current_chat:
+                self.current_chat = None
+                self.set_disabled_input()
 
     # Function to send a message to the user.
 
@@ -293,10 +300,10 @@ class ClientMainWindow(QMainWindow):
                 # Если есть, спрашиваем и желании открыть с ним чат и открываем
                 # при желании
                 if self.messages.question(
-                    self,
-                    'Новое сообщение',
-                    f'Получено новое сообщение от {sender}, открыть чат с ним?',
-                    QMessageBox.Yes,
+                        self,
+                        'Новое сообщение',
+                        f'Получено новое сообщение от {sender}, открыть чат с ним?',
+                        QMessageBox.Yes,
                         QMessageBox.No) == QMessageBox.Yes:
                     self.current_chat = sender
                     self.set_active_user()
@@ -304,10 +311,10 @@ class ClientMainWindow(QMainWindow):
                 print('NO')
                 # Раз нету,спрашиваем хотим ли добавить юзера в контакты.
                 if self.messages.question(
-                    self,
-                    'Новое сообщение',
-                    f'Получено новое сообщение от {sender}.\n Данного пользователя нет в вашем контакт-листе.\n Добавить в контакты и открыть чат с ним?',
-                    QMessageBox.Yes,
+                        self,
+                        'Новое сообщение',
+                        f'Получено новое сообщение от {sender}.\n Данного пользователя нет в вашем контакт-листе.\n Добавить в контакты и открыть чат с ним?',
+                        QMessageBox.Yes,
                         QMessageBox.No) == QMessageBox.Yes:
                     self.add_contact(sender)
                     self.current_chat = sender

@@ -1,8 +1,10 @@
 import json
 import sys
+
 sys.path.append('../')
 from common.decorator import log
 from common.variables import *
+
 
 # Утилита приёма и декодирования сообщения
 # принимает байты выдаёт словарь, если приняточто-то другое отдаёт ошибку типа

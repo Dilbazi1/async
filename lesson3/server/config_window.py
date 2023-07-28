@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QPushButton, QFileDialog, QMessageBox
 from PyQt5.QtCore import Qt
 import os
+
+
 class ConfigWindow(QDialog):
     def __init__(self):
         super().__init__()
@@ -29,7 +31,7 @@ class ConfigWindow(QDialog):
         self.db_path_select = QPushButton('Обзор...', self)
         self.db_path_select.move(275, 28)
 
-         # label  with the field name of the database file
+        # label  with the field name of the database file
         self.db_file_label = QLabel('Имя файла базы данных: ', self)
         self.db_file_label.move(10, 68)
         self.db_file_label.setFixedSize(180, 15)
@@ -86,11 +88,11 @@ class ConfigWindow(QDialog):
     #  function for processing the opening
     #  of the folder selection window
     def open_file_dialog(self):
-            global dialog
-            dialog = QFileDialog(self)
-            path = dialog.getExistingDirectory()
-            path = path.replace('/', '\\')
-            self.db_path.insert(path)
+        global dialog
+        dialog = QFileDialog(self)
+        path = dialog.getExistingDirectory()
+        path = path.replace('/', '\\')
+        self.db_path.insert(path)
 
     def save_server_config(self):
         '''
