@@ -1,33 +1,33 @@
 import socket
 import sys
 import time
-import logging
-import json
+
+import hmac
+import hashlib
+import binascii
 import threading
 
-import hashlib
-import hmac
-import binascii
 from PyQt5.QtCore import pyqtSignal, QObject
 
-sys.path.append('../')
 from common.utils import *
 from common.variables import *
 from common.errors import ServerError
+
+sys.path.append('../')
 
 LOGGER = logging.getLogger('client')
 socket_lock = threading.Lock()
 
 
-# Class - Transport, responsible for interaction with the server
 class ClientTransport(threading.Thread, QObject):
+    '''Class - Transport, responsible for interaction with the server'''
     # Signal new message and connection loss
     new_message = pyqtSignal(dict)
     message_205 = pyqtSignal()
     connection_lost = pyqtSignal()
 
     def __init__(self, port, ip_address, database, username, passwd, keys):
-        # Call an ancestor constructor
+        ''' Call an ancestor constructor'''
         threading.Thread.__init__(self)
         QObject.__init__(self)
 
@@ -58,8 +58,8 @@ class ClientTransport(threading.Thread, QObject):
         # Flag to continue transport operation
         self.running = True
 
-    # Function to initialize the connection with the server
     def connection_init(self, port, ip):
+        ''' Function to initialize the connection with the server'''
         # Initialize the socket and report to the server about our appearance
         self.transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # The timeout is needed to release the socket.
@@ -157,9 +157,8 @@ class ClientTransport(threading.Thread, QObject):
                 f'Получено сообщение от пользователя {message[SENDER]}:{message[MESSAGE_TEXT]}')
             self.new_message.emit(message)
 
-    # The function that updates the contact - list from the server
-
     def contacts_list_update(self):
+        ''' # The function that updates the contact - list from the server'''
         LOGGER.debug(f'Запрос контакт листа для пользователся {self.name}')
         req = {
             ACTION: GET_CONTACTS,
@@ -177,8 +176,8 @@ class ClientTransport(threading.Thread, QObject):
         else:
             LOGGER.error('Не удалось обновить список контактов.')
 
-    # Function to update the table of known users.
     def user_list_update(self):
+        ''' # Function to update the table of known users.'''
         LOGGER.debug(f'Запрос списка известных пользователей {self.username}')
         req = {
             ACTION: USERS_REQUEST,
@@ -209,8 +208,8 @@ class ClientTransport(threading.Thread, QObject):
         else:
             LOGGER.error(f'Не удалось получить ключ собеседника{user}.')
 
-    # Function informing the server about adding a new contact
     def add_contact(self, contact):
+        ''' Function informing the server about adding a new contact'''
         LOGGER.debug(f'Создание контакта {contact}')
         req = {
             ACTION: ADD_CONTACT,
@@ -222,8 +221,8 @@ class ClientTransport(threading.Thread, QObject):
             send_message(self.transport, req)
             self.process_server_ans(get_message(self.transport))
 
-    # The function of deleting a client on the server
     def remove_contact(self, contact):
+        ''' The function of deleting a client on the server'''
         LOGGER.debug(f'Удаление контакта {contact}')
         req = {
             ACTION: REMOVE_CONTACT,
@@ -251,8 +250,8 @@ class ClientTransport(threading.Thread, QObject):
         LOGGER.debug('Транспорт завершает работу.')
         time.sleep(0.5)
 
-    # The function of sending a message to the server
     def send_message(self, to, message):
+        '''  The function of sending a message to the server'''
         message_dict = {
             ACTION: MESSAGE,
             SENDER: self.username,

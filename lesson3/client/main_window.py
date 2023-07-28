@@ -1,28 +1,29 @@
-from PyQt5.QtWidgets import QMainWindow, qApp, QMessageBox, QApplication, QListView
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor
-from PyQt5.QtCore import pyqtSlot, QEvent, Qt
 import sys
 import json
-import logging
+import base64
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor
+from PyQt5.QtWidgets import QMainWindow, qApp, QMessageBox
+
+from PyQt5.QtCore import pyqtSlot, Qt
+
 from Cryptodome.Cipher import PKCS1_OAEP
 from Cryptodome.PublicKey import RSA
 
-sys.path.append('../')
 from client.main_window_conv import Ui_MainClientWindow
 from client.add_contact import AddContactDialog
 from client.del_contact import DelContactDialog
-from client.client_database import ClientDatabase
-from client.transport import ClientTransport
-from client.start_dialog import UserNameDialog
+
 from common.errors import ServerError
 from common.variables import *
-import base64
+
+sys.path.append('../')
 
 logger = logging.getLogger('client')
 
 
-# class main window
 class ClientMainWindow(QMainWindow):
+    """class main window"""
+
     def __init__(self, database, transport, keys):
         super().__init__()
         # main variables
@@ -61,8 +62,8 @@ class ClientMainWindow(QMainWindow):
         self.set_disabled_input()
         self.show()
 
-    # Deactivate input fields
     def set_disabled_input(self):
+        """Deactivate input fields"""
         #  inscription - recipient.
         self.ui.label_new_message.setText('Для выбора получателя дважды кликните на нем в окне контактов.')
         self.ui.text_message.clear()
@@ -81,7 +82,7 @@ class ClientMainWindow(QMainWindow):
         # Filling in the message history.
 
     def history_list_update(self):
-        # Get history sorted by date
+        """Get history sorted by date"""
         list = sorted(self.database.get_history(self.current_chat), key=lambda item: item[3])
         # If the model is not created, create it.
         if not self.history_model:
@@ -112,8 +113,8 @@ class ClientMainWindow(QMainWindow):
                 self.history_model.appendRow(mess)
         self.ui.list_messages.scrollToBottom()
 
-    # Contact double click handler function
     def select_active_user(self):
+        """ Contact double click handler function"""
         # The user-selected (doubleclick) is on the selected item in the QListView
         self.current_chat = self.ui.list_contacts.currentIndex().data()
         # calling the main function
@@ -154,6 +155,7 @@ class ClientMainWindow(QMainWindow):
         # Function to update the contact list
 
     def clients_list_update(self):
+        '''Метод обновляющий список контактов.'''
         contacts_list = self.database.get_contacts()
         self.contacts_model = QStandardItemModel()
         for i in sorted(contacts_list):
@@ -164,19 +166,20 @@ class ClientMainWindow(QMainWindow):
 
     # Add contact function
     def add_contact_window(self):
+        '''Метод создающий окно - диалог добавления контакта'''
         global select_dialog
         select_dialog = AddContactDialog(self.transport, self.database)
         select_dialog.btn_ok.clicked.connect(lambda: self.add_contact_action(select_dialog))
         select_dialog.show()
 
-    # Function - add handler, tells the server to update the table and contact list
     def add_contact_action(self, item):
+        """ Function - add handler, tells the server to update the table and contact list"""
         new_contact = item.selector.currentText()
         self.add_contact(new_contact)
         item.close()
 
-    # A function that adds a contact to the database
     def add_contact(self, new_contact):
+        ''' A function that adds a contact to the database'''
         try:
             self.transport.add_contact(new_contact)
         except ServerError as err:
@@ -194,9 +197,8 @@ class ClientMainWindow(QMainWindow):
             logger.info(f'Успешно добавлен контакт {new_contact}')
             self.messages.information(self, 'Успех', 'Контакт успешно добавлен.')
 
-    # Delete contact function
-
     def delete_contact_window(self):
+        ''' Delete contact function'''
         global remove_dialog
         remove_dialog = DelContactDialog(self.database)
         remove_dialog.btn_ok.clicked.connect(lambda: self.delete_contact(remove_dialog))
@@ -205,6 +207,10 @@ class ClientMainWindow(QMainWindow):
         # Contact deletion handler function, reports to the server, updates the contact table
 
     def delete_contact(self, item):
+        '''
+                Метод удаляющий контакт из серверной и клиентсткой BD.
+                После обновления баз данных обновляет и содержимое окна.
+                '''
         selected = item.selector.currentText()
         try:
             self.transport.remove_contact(selected)
@@ -225,8 +231,6 @@ class ClientMainWindow(QMainWindow):
             if selected == self.current_chat:
                 self.current_chat = None
                 self.set_disabled_input()
-
-    # Function to send a message to the user.
 
     def send_message(self):
         '''

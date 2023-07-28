@@ -1,16 +1,21 @@
+"""Dialog for selecting a contact to add """
 import sys
 import logging
 
-sys.path.append('../')
 from PyQt5.QtWidgets import QDialog, QLabel, QComboBox, QPushButton
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
+sys.path.append('../')
 LOGGER = logging.getLogger('client')
 
 
-# Dialog for selecting a contact to add
 class AddContactDialog(QDialog):
+    '''
+       Диалог добавления пользователя в список контактов.
+       Предлагает пользователю список возможных контактов и
+       добавляет выбранный в контакты.
+       '''
+
     def __init__(self, transport, database):
         super().__init__()
         self.transport = transport
@@ -47,8 +52,13 @@ class AddContactDialog(QDialog):
         # Assign an action to the refresh button
         self.btn_refresh.clicked.connect(self.update_possible_contacts)
 
-    # Populate the list of possible contacts with the difference between all users
     def possible_contacts_update(self):
+        '''
+               Populate the list of possible contacts with the difference between all users
+               Метод заполнения списка возможных контактов.
+               Создаёт список всех зарегистрированных пользователей
+               за исключением уже добавленных в контакты и самого себя.
+               '''
         self.selector.clear()
         # sets of all contacts and customer contacts
         contact_list = set(self.database.get_contacts())
@@ -58,9 +68,13 @@ class AddContactDialog(QDialog):
         # Add a list of possible contacts
         self.selector.addItems(users_list - contact_list)
 
-    # Update possible contacts. Updates the table of known users,
-    # then the contents of the intended contacts
     def update_possible_contacts(self):
+        '''
+        Update possible contacts. Updates the table of known users,
+        then the contents of the intended contacts
+        Метод обновления списка возможных контактов. Запрашивает с сервера
+        список известных пользователей и обносляет содержимое окна.
+        '''
         try:
             self.transport.user_list_update()
         except OSError:

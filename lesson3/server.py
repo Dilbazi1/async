@@ -39,8 +39,8 @@ def arg_parser(default_port, default_address):
     return listen_address, listen_port, gui_flag
 
 
-# Загрузка файла конфигурации
 def config_load():
+    ''' Загрузка файла конфигурации'''
     config = configparser.ConfigParser()
     dir_path = os.path.dirname(os.path.realpath(__file__))
     config.read(f"{dir_path}/{'server.ini'}")

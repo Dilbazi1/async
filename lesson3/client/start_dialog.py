@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QDialog, QPushButton, QLineEdit, QApplication, QLabel, qApp
-from PyQt5.QtCore import QEvent
 
 
-# Start dialog with username selection
 class UserNameDialog(QDialog):
+    '''# Start dialog with username selection'''
+
     def __init__(self):
         super().__init__()
 

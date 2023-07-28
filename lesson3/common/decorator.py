@@ -1,10 +1,10 @@
 import inspect
+import socket
+import logging
 
 import log.logs_config.client_config
 import log.logs_config.server_config
 
-import socket
-import logging
 
 import sys
 

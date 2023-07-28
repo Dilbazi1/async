@@ -1,4 +1,4 @@
-# import sys
+
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QLabel, QTableView
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtCore import QTimer
@@ -9,6 +9,7 @@ from server.remove_user import DelUserDialog
 
 
 class MainWindow(QMainWindow):
+    '''Класс - основное окно сервера.'''
     def __init__(self, database, server, config):
         # Конструктор предка
         super().__init__()

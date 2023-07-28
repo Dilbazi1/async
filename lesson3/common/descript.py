@@ -3,8 +3,9 @@ import logging
 logger = logging.getLogger('server')
 
 
-# Дескриптор для описания порта:
+
 class Port:
+    ''' Дескриптор для описания порта:'''
     def __set__(self, instance, value):
         # instance - <__main__.Server object at 0x000000D582740C50>
         # value - 7777

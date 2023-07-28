@@ -1,6 +1,6 @@
+import datetime
 from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, ForeignKey, DateTime, Text
 from sqlalchemy.orm import mapper, sessionmaker
-import datetime
 
 
 class ServerStorage:

@@ -1,15 +1,17 @@
+import os
 from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QPushButton, QFileDialog, QMessageBox
 from PyQt5.QtCore import Qt
-import os
 
 
 class ConfigWindow(QDialog):
+    '''Класс окно настроек.'''
+
     def __init__(self):
         super().__init__()
         self.initUI()
 
     def initUI(self):
-        # window settings
+        '''window settings'''
 
         self.setFixedSize(365, 260)
         self.setWindowTitle('Настройки сервера')
@@ -85,9 +87,9 @@ class ConfigWindow(QDialog):
         self.ip.insert(self.config['SETTINGS']['Listen_Address'])
         self.save_btn.clicked.connect(self.save_server_config)
 
-    #  function for processing the opening
-    #  of the folder selection window
     def open_file_dialog(self):
+        '''#  function for processing the opening
+          #  of the folder selection window'''
         global dialog
         dialog = QFileDialog(self)
         path = dialog.getExistingDirectory()
